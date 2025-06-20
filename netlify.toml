@@ -1,0 +1,44 @@
+[build]
+  # Build command to run
+  command = "chmod +x build.sh && ./build.sh"
+  
+  # Directory to publish (where the built files are)
+  publish = "dist"
+
+[build.environment]
+  # Node.js version (not needed for this plugin, but good to specify)
+  NODE_VERSION = "18"
+
+# Redirect rules for clean URLs
+[[redirects]]
+  from = "/download"
+  to = "/employee-portal.zip"
+  status = 200
+  
+[[redirects]]
+  from = "/latest"
+  to = "/employee-portal.zip"
+  status = 200
+
+# Headers for better security and caching
+[[headers]]
+  for = "/*.zip"
+  [headers.values]
+    Content-Type = "application/zip"
+    Cache-Control = "public, max-age=3600"
+    Content-Disposition = "attachment"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Deploy previews configuration
+[context.deploy-preview]
+  command = "chmod +x build.sh && ./build.sh"
+
+[context.branch-deploy]
+  command = "chmod +x build.sh && ./build.sh"
